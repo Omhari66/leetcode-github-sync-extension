@@ -1,6 +1,12 @@
-# LeetCode → GitHub Sync (with Approach Journaling)
+# LeetCode → GitHub Sync (with Approach Journaling) v0.3
 
 A Chrome extension that goes beyond blindly backing up your LeetCode code. It prompts you to actively log your **approach**, **time/space complexity**, and **pattern tags** right on the LeetCode success screen, then pushes everything to a beautifully organized GitHub repository.
+
+## 🚀 New in v0.3 (Pro Features)
+- **Time Tracking:** A built-in SPA timer automatically tracks how long you spend on a problem and saves it in your notes. (Editable in the panel).
+- **Multiple Solutions:** Submit brute force and optimal solutions for the same problem. Name your approach, and the extension will save them cleanly without overwriting your old notes!
+- **Smart Portfolio Website:** The extension automatically injects an `index.html` file into your repo. Just enable GitHub Pages, and you instantly have a beautiful, dark-mode portfolio dashboard displaying your LeetCode progress!
+- **Migration Script:** Included `migrate_repo.js` to automatically reorganize your old flat folders into the new pattern-based folder structure.
 
 ## Features
 
@@ -30,7 +36,7 @@ A Chrome extension that goes beyond blindly backing up your LeetCode code. It pr
 
 1. Solve a problem on LeetCode and click **Submit**.
 2. When the result is **Accepted**, the notes panel will automatically slide in from the bottom right.
-3. Fill out your time/space complexity, select relevant pattern tags (like *Dynamic Programming* or *Two Pointers*), and jot down your approach.
+3. Fill out your time/space complexity, name your approach (optional), select relevant pattern tags, and jot down your approach.
 4. Click **Save & Push**.
 5. Check your GitHub repository—your code and notes will be beautifully organized and synced!
 
@@ -38,7 +44,7 @@ A Chrome extension that goes beyond blindly backing up your LeetCode code. It pr
 
 ## Architecture
 
-- **`content_main.js`**: Injected into the MAIN world to intercept LeetCode's native `fetch` requests and reliably detect Accepted submissions.
+- **`content_main.js`**: Injected into the MAIN world to intercept LeetCode's native `fetch` requests and reliably detect Accepted submissions. Tracks time spent on the page.
 - **`content_isolated.js`**: Injected into the ISOLATED world to safely inject the UI panel (HTML/CSS) without conflicting with LeetCode's styling.
-- **`background.js`**: Service worker that handles all direct communication with the GitHub API (creating files, decoding base64, managing exponential backoff for rate limits).
+- **`background.js`**: Service worker that handles all direct communication with the GitHub API (creating files, decoding base64, managing exponential backoff for rate limits, building the smart portfolio).
 - **`popup.html/js/css`**: The control center for managing your GitHub PAT and viewing your sync history.
