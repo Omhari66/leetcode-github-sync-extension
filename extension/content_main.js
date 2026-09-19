@@ -10,10 +10,41 @@
 
   // State from the most recent submission API response.
   // These are more reliable than DOM scraping.
+  let lastApiLang = null;
+  let lastApiQNum = null;
+  let lastApiTitleSlug = null;
   let lastSlugFromSubmit = null;
-  let lastApiLang = null;       // e.g. "python3", "cpp", "java" — from /check/ response
-  let lastApiQNum = null;       // question_id from /check/ response
-  let lastApiTitleSlug = null;  // title_slug from /check/ response
+
+  // SPA Timer
+  let problemStartTime = Date.now();
+  let currentSlug = "";
+
+  function formatTime(ms) {
+    if (ms < 0) return "0s";
+    const totalSecs = Math.floor(ms / 1000);
+    const m = Math.floor(totalSecs / 60);
+    const s = totalSecs % 60;
+    if (m === 0) return `${s}s`;
+    return `${m}m ${s}s`;
+  }
+
+  let lastUrl = location.href;
+  new MutationObserver(() => {
+    if (location.href !== lastUrl) {
+      lastUrl = location.href;
+      const match = lastUrl.match(/\/problems\/([a-z0-9-]+)/);
+      if (match) {
+        const slug = match[1];
+        if (slug !== currentSlug) {
+          currentSlug = slug;
+          problemStartTime = Date.now();
+        }
+      }
+    }
+  }).observe(document, { subtree: true, childList: true });
+
+  const initialMatch = location.href.match(/\/problems\/([a-z0-9-]+)/);
+  if (initialMatch) currentSlug = initialMatch[1];
 
   function post(type, payload) {
     window.postMessage({ source: "lgs-main", type, payload }, "*");
@@ -178,10 +209,14 @@
               });
             }
 
+            const timeSpentMs = Date.now() - problemStartTime;
+            const timeSpent = formatTime(timeSpentMs);
+
             post("ACCEPTED_SUBMISSION", {
               ...meta,
               code,
               language,
+              timeSpent,
               url: `https://leetcode.com/problems/${meta.slug}/`,
             });
           }

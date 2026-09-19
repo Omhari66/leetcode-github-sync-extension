@@ -208,9 +208,10 @@ function slugFolder(qNum, slug) {
   return `${num}-${slug}`;
 }
 
-function buildSolutionPath(folder, lang) {
+function buildSolutionPath(folder, lang, approachName) {
   const ext = LANG_EXT[(lang || "").toLowerCase()] || "txt";
-  return `${folder}/solution.${ext}`;
+  const safeApproachName = (approachName || "Solution").replace(/[^a-zA-Z0-9-]/g, '-');
+  return `${folder}/${safeApproachName}.${ext}`;
 }
 
 function getDifficultyEmoji(difficulty) {
@@ -317,7 +318,8 @@ async function syncSubmission(payload) {
   const problemFolder = slugFolder(payload.qNum, payload.slug);
   const folder = `${primaryTag}/${problemFolder}`;
   
-  const solutionPath = buildSolutionPath(folder, payload.language);
+  const approachName = payload.notes?.approachName || "Solution";
+  const solutionPath = buildSolutionPath(folder, payload.language, approachName);
   const readmePath = `${folder}/README.md`;
 
   const problem = {
@@ -329,26 +331,88 @@ async function syncSubmission(payload) {
     folder,
   };
 
-  const diffStr = problem.difficulty ? ` [${problem.difficulty}]` : "";
+  // 1. Ensure solution file exists
   await putFile(
     owner,
     repo,
     solutionPath,
     payload.code,
-    `feat(solution): #${payload.qNum} ${payload.title}${diffStr} (${payload.language})`,
+    `feat(solution): #${payload.qNum} ${payload.slug} [${payload.difficulty}] (${payload.language})`,
     pat
   );
+
+  // 2. Setup problem README (Append approach notes)
+  let existingReadme = await getFileText(owner, repo, readmePath, pat);
+  
+  const approachSection = `## Approach: ${approachName}
+
+${payload.notes?.timeSpent ? `⏱️ **Time Spent:** ${payload.notes.timeSpent}\n` : ""}
+- **Time Complexity:** ${payload.notes?.complexity?.time || "O(?)"}
+- **Space Complexity:** ${payload.notes?.complexity?.space || "O(?)"}
+
+${payload.notes?.text || "*No notes provided.*"}
+
+---`;
+
+  let newReadmeContent = "";
+  if (existingReadme) {
+    newReadmeContent = existingReadme.trimEnd() + "\n\n" + approachSection;
+  } else {
+    newReadmeContent = `# ${payload.title}\n\n[View on LeetCode](${payload.url})\n\n**Difficulty:** ${getDifficultyEmoji(payload.difficulty)}\n**Tags:** ${(payload.notes?.tags || []).join(", ") || "None"}\n\n---\n\n${approachSection}`;
+  }
 
   await putFile(
     owner,
     repo,
     readmePath,
-    buildProblemReadme(problem, payload.notes),
-    `docs: notes for #${payload.qNum} ${payload.title}`,
+    newReadmeContent,
+    `docs: update notes for ${payload.title} (${approachName})`,
     pat
   );
 
+  // 3. Update root README table
   await upsertRootReadme(owner, repo, problem, pat);
+
+  // 4. Inject Smart Portfolio Website if missing
+  const indexExists = await getFileText(owner, repo, "index.html", pat);
+  if (!indexExists) {
+    const htmlTemplate = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My LeetCode Portfolio</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #0d1117; color: #c9d1d9; margin: 0; padding: 40px 20px; text-align: center; }
+    h1 { color: #58a6ff; margin-bottom: 5px; }
+    #stats { margin: 10px 0 30px; font-size: 1.2rem; font-weight: 500; color: #8b949e; }
+    table { margin: 0 auto; border-collapse: collapse; width: 100%; max-width: 800px; text-align: left; }
+    th, td { padding: 12px; border-bottom: 1px solid #30363d; }
+    th { background: #161b22; }
+    a { color: #58a6ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <h1>My LeetCode Portfolio</h1>
+  <div id="stats">Loading stats...</div>
+  <div id="table-container"></div>
+  <script>
+    fetch('README.md').then(r => r.text()).then(text => {
+      const statsMatch = text.match(/> \*\*(\d+)\*\* solved — (\d+) Easy · (\d+) Medium · (\d+) Hard/);
+      if (statsMatch) {
+         document.getElementById('stats').innerHTML = \`\${statsMatch[1]} Solved: <span style="color:#2ecc71">\${statsMatch[2]} Easy</span> | <span style="color:#f39c12">\${statsMatch[3]} Medium</span> | <span style="color:#e74c3c">\${statsMatch[4]} Hard</span>\`;
+      }
+      const tableStart = text.indexOf('| # |');
+      if (tableStart !== -1) {
+        document.getElementById('table-container').innerHTML = marked.parse(text.substring(tableStart));
+      }
+    });
+  </script>
+</body>
+</html>`;
+    await putFile(owner, repo, "index.html", htmlTemplate, "chore: setup smart portfolio website", pat);
+  }
 
   const historyEntry = {
     title: payload.title,

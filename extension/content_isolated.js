@@ -70,12 +70,16 @@ function showPanel(submission) {
     placeholder: "Approach Example: I used a Two Pointer approach. One pointer starts at the beginning, one at the end. We move them towards the center based on which height is smaller, because the water trapped depends on the smaller boundary.",
   });
 
-  const compTime = el("input", { class: "lgs-comp-input", placeholder: "O(n)" });
-  const compSpace = el("input", { class: "lgs-comp-input", placeholder: "O(1)" });
-  const complexityRow = el("div", { class: "lgs-complexity-row" }, [
-    el("div", { class: "lgs-comp-group" }, [el("span", { text: "Time:" }), compTime]),
-    el("div", { class: "lgs-comp-group" }, [el("span", { text: "Space:" }), compSpace]),
-  ]);
+  const metaRow = el("div", { class: "lgs-row" });
+  const appName = el("input", { class: "lgs-comp-input", placeholder: "Approach Name (e.g. Brute Force)" });
+  const timeInput = el("input", { class: "lgs-comp-input", placeholder: "Time Spent (e.g. 15m)" });
+  if (submission.timeSpent) timeInput.value = submission.timeSpent;
+  metaRow.append(appName, timeInput);
+
+  const compRow = el("div", { class: "lgs-row" });
+  const compTime = el("input", { class: "lgs-comp-input", placeholder: "Time Complexity (O(n))" });
+  const compSpace = el("input", { class: "lgs-comp-input", placeholder: "Space Complexity (O(1))" });
+  compRow.append(compTime, compSpace);
 
   const statusIcon = el("span", { class: "lgs-status-icon", text: "" });
   const statusText = el("span", { text: "" });
@@ -98,6 +102,8 @@ function showPanel(submission) {
       notes: { 
         text: notesText, 
         tags: Array.from(selectedTags),
+        approachName: appName.value.trim() || "Solution",
+        timeSpent: timeInput.value.trim(),
         complexity: {
           time: compTime.value.trim(),
           space: compSpace.value.trim()
@@ -146,7 +152,8 @@ function showPanel(submission) {
       el("div", { class: "lgs-header" }, [titleRow, closeBtn]),
       warnBannerContainer,
       textarea,
-      complexityRow,
+      metaRow,
+      compRow,
       el("div", { class: "lgs-sub", text: "Patterns & Structures" }),
       tagRow,
       el("div", { class: "lgs-actions" }, [skipBtn, syncBtn]),
