@@ -1,0 +1,115 @@
+#lgs-panel {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 340px;
+  background: #1a1a1a;
+  color: #eaeaea;
+  border: 1px solid #333;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 999999;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  padding: 14px;
+}
+
+#lgs-panel .lgs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-weight: 600;
+  color: #2ecc71;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+#lgs-panel .lgs-close {
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+
+#lgs-panel .lgs-sub {
+  color: #999;
+  margin-bottom: 6px;
+}
+
+#lgs-panel .lgs-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+#lgs-panel .lgs-chip {
+  background: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  color: #ccc;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+#lgs-panel .lgs-chip-active {
+  background: #2ecc71;
+  color: #111;
+  border-color: #2ecc71;
+}
+
+#lgs-panel .lgs-textarea {
+  width: 100%;
+  min-height: 70px;
+  resize: vertical;
+  background: #111;
+  color: #eee;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 12px;
+  font-family: inherit;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+#lgs-panel .lgs-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+#lgs-panel .lgs-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  flex: 1;
+}
+
+#lgs-panel .lgs-btn-primary {
+  background: #2ecc71;
+  color: #111;
+  font-weight: 600;
+}
+
+#lgs-panel .lgs-btn-ghost {
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #333;
+}
+
+#lgs-panel .lgs-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+#lgs-panel .lgs-status {
+  margin-top: 8px;
+  color: #aaa;
+  min-height: 14px;
+}

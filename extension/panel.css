@@ -1,0 +1,252 @@
+#lgs-panel {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 380px;
+  background: rgba(22, 22, 22, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #eaeaea;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  z-index: 999999;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+  font-size: 13px;
+  padding: 16px;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+}
+
+#lgs-panel.lgs-slide-in {
+  animation: lgsSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+#lgs-panel.lgs-slide-out {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+@keyframes lgsSlideIn {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+#lgs-panel .lgs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+#lgs-panel .lgs-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #fff;
+}
+
+#lgs-panel .lgs-diff-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+#lgs-panel .lgs-close {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 4px;
+  transition: color 0.2s ease;
+}
+
+#lgs-panel .lgs-close:hover {
+  color: #fff;
+}
+
+#lgs-panel .lgs-warn-banner {
+  background: rgba(243, 156, 18, 0.15);
+  border-left: 3px solid #f39c12;
+  color: #e0b069;
+  padding: 8px 10px;
+  font-size: 11px;
+  border-radius: 0 4px 4px 0;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+#lgs-panel .lgs-sub {
+  color: #888;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#lgs-panel .lgs-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+#lgs-panel .lgs-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #bbb;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#lgs-panel .lgs-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+#lgs-panel .lgs-chip-active {
+  background: rgba(0, 210, 106, 0.15);
+  color: #00d26a;
+  border-color: rgba(0, 210, 106, 0.4);
+}
+
+#lgs-panel .lgs-textarea {
+  width: 100%;
+  min-height: 80px;
+  resize: vertical;
+  background: rgba(0, 0, 0, 0.2);
+  color: #eee;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  font-family: inherit;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+#lgs-panel .lgs-textarea:focus {
+  outline: none;
+  border-color: rgba(0, 210, 106, 0.5);
+}
+
+#lgs-panel .lgs-complexity-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+#lgs-panel .lgs-comp-group {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+#lgs-panel .lgs-comp-group span {
+  color: #888;
+  font-size: 11px;
+  margin-right: 6px;
+}
+
+#lgs-panel .lgs-comp-input {
+  background: transparent;
+  border: none;
+  color: #eee;
+  font-size: 12px;
+  font-family: monospace;
+  width: 100%;
+}
+
+#lgs-panel .lgs-comp-input:focus {
+  outline: none;
+}
+
+#lgs-panel .lgs-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+#lgs-panel .lgs-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#lgs-panel .lgs-btn-primary {
+  background: #00d26a;
+  color: #000;
+}
+
+#lgs-panel .lgs-btn-primary:hover {
+  background: #00e676;
+}
+
+#lgs-panel .lgs-btn-ghost {
+  background: transparent;
+  color: #888;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#lgs-panel .lgs-btn-ghost:hover {
+  color: #ccc;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+#lgs-panel .lgs-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#lgs-panel .lgs-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: #aaa;
+  min-height: 16px;
+}
+
+#lgs-panel .lgs-status-icon {
+  display: inline-block;
+  width: 14px;
+  text-align: center;
+}
+
+#lgs-panel .lgs-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #00d26a;
+  border-radius: 50%;
+  animation: lgs-spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes lgs-spin {
+  to { transform: rotate(360deg); }
+}

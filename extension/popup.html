@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="header">
+    <div class="header-title">
+      <img src="icons/icon48.png" width="20" height="20" alt="Logo" class="logo" />
+      <h1>LeetCode → GitHub</h1>
+    </div>
+  </div>
+
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-item">
+      <div class="stat-value" id="statTotal">0</div>
+      <div class="stat-label">Solved</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-pill easy" id="statEasy">0</div>
+      <div class="stat-pill medium" id="statMed">0</div>
+      <div class="stat-pill hard" id="statHard">0</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <label>GitHub Personal Access Token</label>
+    <div class="input-wrapper">
+      <input type="password" id="pat" placeholder="ghp_..." />
+      <button id="togglePat" class="icon-btn" title="Toggle visibility">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+      </button>
+    </div>
+    <p class="hint">
+      Needs <b>Contents: Read & write</b> on the target repo.
+    </p>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="owner" placeholder="omhari66" />
+      </div>
+      <div class="form-group">
+        <label>Repository</label>
+        <input type="text" id="repo" placeholder="leetcode-solutions" />
+      </div>
+    </div>
+
+    <label class="checkbox-row">
+      <input type="checkbox" id="autoCreateRepo" checked />
+      Create repo if missing
+    </label>
+
+    <div class="actions">
+      <button id="test" class="btn-ghost">Test Connection</button>
+      <button id="save" class="btn-primary">Save Settings</button>
+    </div>
+    <div id="settingsStatus" class="status"></div>
+  </div>
+
+  <div class="card">
+    <div class="history-header">
+      <h3>Recent Syncs</h3>
+      <button id="manualSync" class="btn-text" title="Sync current tab">Sync Tab Now ↺</button>
+    </div>
+    <div id="historyList" class="history-list">
+      <!-- Populated by JS -->
+      <div class="empty-state">No history yet. Go solve a problem!</div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
