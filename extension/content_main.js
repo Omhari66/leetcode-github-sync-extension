@@ -38,6 +38,11 @@
         if (slug !== currentSlug) {
           currentSlug = slug;
           problemStartTime = Date.now();
+          // Clear stale API cache so manual sync reads the NEW problem.
+          lastApiLang = null;
+          lastApiQNum = null;
+          lastApiTitleSlug = null;
+          lastSlugFromSubmit = null;
         }
       }
     }

@@ -21,9 +21,8 @@ const QUICK_TAGS = [
   "Math"
 ];
 
-// Map of QNum+Slug to the last payload we saw
-const pendingSubmissions = new Map();
-let currentSubmissionKey = null;
+// Tracks the most recently shown submission so the panel always uses fresh data.
+let latestSubmission = null;
 
 function el(tag, attrs = {}, children = []) {
   const node = document.createElement(tag);
@@ -46,9 +45,8 @@ function getDiffColor(difficulty) {
 }
 
 function showPanel(submission) {
-  currentSubmissionKey = `${submission.qNum}-${submission.slug}`;
-  pendingSubmissions.set(currentSubmissionKey, submission);
-
+  // Always replace — prevents stale data leaking across problem navigations.
+  latestSubmission = submission;
   document.getElementById("lgs-panel")?.remove();
 
   const tagRow = el("div", { class: "lgs-tags" });
@@ -95,10 +93,9 @@ function showPanel(submission) {
     syncBtn.disabled = true;
     skipBtn.disabled = true;
 
-    // Use latest stored for this key
-    const payload = pendingSubmissions.get(currentSubmissionKey) || submission;
+    // Always use the submission this panel was opened for — never stale data.
     const finalPayload = {
-      ...payload,
+      ...submission,
       notes: { 
         text: notesText, 
         tags: Array.from(selectedTags),
